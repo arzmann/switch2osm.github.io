@@ -23,7 +23,7 @@ permalink: /other-uses/
 * [Gosmore](http://sourceforge.net/projects/gosmore/) проверенный временем "движок" для построения маршрутов..
 * [Graphhopper](http://graphhopper.com/) - это быстрый движок для маршрутизации на Java.
 * [MapQuest Open](http://open.mapquestapi.com/directions/) и [Mapbox](https://www.mapbox.com/directions/) предоставляют публичные API для маршрутизации, которые используют данные OSM.
-* К специальным API для маршрутизации можно отнести [CycleStreets](https://www.cyclestreets.net/api/), который строит маршруты для велосипедов (Великобритания и за нее пределами).
+* К специальным API для маршрутизации можно отнести [CycleStreets](https://www.cyclestreets.net/api/), который строит маршруты для велосипедов (Великобритания и за ее пределами).
 
 ## Библиотеки векторных карт (mobile)
 * Библиотеки для Android: [Mapbox Android SDK](https://www.mapbox.com/android-sdk/), [mapsforge](http://mapsforge.org/), [Nutiteq Maps SDK](https://developer.nutiteq.com/), [Skobbler Android SDK](http://developer.skobbler.com/) и [Tangram ES](https://github.com/tangrams/tangram-es/).
