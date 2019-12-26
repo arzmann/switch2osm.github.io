@@ -1,9 +1,9 @@
 title: Switch2OSM
 description: >
-  Switch to OpenStreetMap and discover how you can build beautiful maps from the world’s best map data.
+  Переходите на OpenStreetMap и узнайте, как сделать красивые карты из лучших в мире геоданных.
 baseurl: "" # the subpath of your site, e.g. /blog
 copyright: 2013–2019 OpenStreetMap and contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA</a>
-url: https://switch2osm.github.io
+url: http://use.openstreetmap.ru
 github_username: switch2osm
 
 # Build settings
