@@ -1,44 +1,45 @@
 ---
 layout: page
-title: Providers
+title: Провайдеры
 permalink: /providers/
 ---
 
-## Development services and consulting
+## Разработка и консалтинг
 
-The following companies offer development services and consulting for sites wishing to switch to OpenStreetMap.
+Следующие компании предлагают услуги по разработке и консалтингу для сайтов, желающих перейти на OpenStreetMap.
 
-* [AND Automotive Navigation Data](https://www.and.com/services-3/map-hosting/), Netherlands
-* [Camptocamp](https://camptocamp.com/), Switzerland
-* [Carto](https://carto.com/), US
-* [Geofabrik](https://www.geofabrik.de/), Germany
-* [GreenInfo Network](https://www.greeninfo.org/), US (public interest groups only)
-* [ITO!](https://www.itoworld.com/), UK
-* [Mapbox](https://www.mapbox.com/), US
-* [MapTiler](https://www.maptiler.com/), Switzerland
-* [Makina Corpus](https://makina-corpus.com/), France
-* [Skobbler](https://developer.skobbler.com/), Germany
-* [Stadia Maps](https://stadiamaps.com), US
-* [Stamen](https://www.stamen.com/), US
-* [Système D](https://www.systemeD.net/openstreetmap/ "OpenStreetMap consultancy by Richard Fairhurst"), UK
+* [NextGIS](https://nextgis.ru/), Россия 
+* [AND Automotive Navigation Data](https://www.and.com/services-3/map-hosting/), Нидерланды
+* [Camptocamp](https://camptocamp.com/), Швейцария
+* [Carto](https://carto.com/), США
+* [Geofabrik](https://www.geofabrik.de/), Германия
+* [GreenInfo Network](https://www.greeninfo.org/), США (только общественные инициативы)
+* [ITO!](https://www.itoworld.com/), Великобритания
+* [Mapbox](https://www.mapbox.com/), США
+* [MapTiler](https://www.maptiler.com/), Швейцария
+* [Makina Corpus](https://makina-corpus.com/), Франция
+* [Skobbler](https://developer.skobbler.com/), Германия
+* [Stadia Maps](https://stadiamaps.com), США
+* [Stamen](https://www.stamen.com/), США
+* [Système D](https://www.systemeD.net/openstreetmap/ "OpenStreetMap consultancy by Richard Fairhurst"), Великобритания
 
-## Tile hosting
+## Хостинги тайлов
 
-The following companies host OpenStreetMap tiles.
+Следующие компании предоставляют тайлы
 
-### Allows free usage
+### Есть бесплатные предложения
 
-* [Carto](https://carto.com/), US
-* [Mapbox](http://mapbox.com/), US
-* [MapTiler](https://www.maptiler.com/), Switzerland
-* [Nextzen](https://www.nextzen.org/), US
-* [Skobbler](https://developer.skobbler.com/), Germany
-* [Stadia Maps](https://stadiamaps.com), US
-* [Stamen](https://stamen.com/), US
-* [Thunderforest](https://www.thunderforest.com), UK
+* [Carto](https://carto.com/), США
+* [Mapbox](http://mapbox.com/), США
+* [MapTiler](https://www.maptiler.com/), Швейцария
+* [Nextzen](https://www.nextzen.org/), США
+* [Skobbler](https://developer.skobbler.com/), Германия
+* [Stadia Maps](https://stadiamaps.com), США
+* [Stamen](https://stamen.com/), США
+* [Thunderforest](https://www.thunderforest.com), Великобритания
 
-### Paid customers only
+### Только за плату
 
-* [AND Automotive Navigation Data](https://www.and.com/services-3/map-hosting/), Netherlands
-* [Geofabrik](https://www.geofabrik.de/maps/rendering.html), Germany
-* [Makina Corpus](https://makina-corpus.com/), France
+* [AND Automotive Navigation Data](https://www.and.com/services-3/map-hosting/), Нидерланды
+* [Geofabrik](https://www.geofabrik.de/maps/rendering.html), Германия
+* [Makina Corpus](https://makina-corpus.com/), Франция

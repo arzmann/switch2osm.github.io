@@ -1,28 +1,27 @@
 ---
 layout: page
-title: Why Switch?
+title: Зачем переходить?
 permalink: /why-switch/
 ---
 
-# OpenStreetMap won’t charge you
+# OpenStreetMap бесплатен
 
-OpenStreetMap is open data. We won’t charge for it – ever. Our licence says that you can always copy our data for free.
-This data is made into the “map tiles” that you show on your site. You can do this yourself. Or you can find a specialist to do it: some will charge for this, some won’t. But OpenStreetMap itself will never charge you for the data.
+OpenStreetMap - это открытые данные. Мы никогда не будем брать деньги за их использование. 
+Согласно лицензии, любой может свободно скопировать наши данные. В свою очередь, эти данные могут стать основой для тайлов (картографической подложки), которые вы можете разместить на своем сайте. Вы можете сгенерировать их сами или найти для этого специалиста. Некоторые из них берут деньги, а некоторые - нет. Но сам OpenStreetMap никогда не будет взимать плату за данные.
+# Настройте карты под себя
 
-# Make the maps suit you
+Чаще всего у других поставщиков карт ограничен выбор картостилей. Вполне возможно, что вы можете немного поиграться с цветами. Но это все равно их стиль, а не ваш.
 
-With other map providers, the map looks how the provider wants it to look. You might be able to do a bit of rudimentary recolouring. But it’s still their style of map, not yours.
+С OpenStreetMap все намного проще. Данные всегда можно превратить в тайлы. Хотите выделить велосипедные дорожки, а автомагистрали убрать на задний план? Без проблем. Кстати, на большинстве карт даже нет велосипедных дорожек. Хотите показать только станции метро, а автобусные остановки не отображать? Легко.
 
-With OpenStreetMap, you’re in control. Turning the data into tiles can be done any way you like. Want to emphasise cycle routes and play down motorways? No problem. (Most other maps don’t even have cycle routes.) Want to label subway stops but ignore bus stops? Easy.
+# Обширные, точные и актуальные картографические данные
 
-# Rich, accurate, up-to-date map data
+Большинство коммерческих поставщиков данных предлагает только улицы. В названии проекта OpenStreetMap тоже упоминается слово "улица", но у нас есть гораздо больше данных. Природные объекты, автобусные маршруты, пешеходные и велосипедные дорожки, административные границы, магазины, реки и каналы и многое другое.
 
-Most commercial providers just do streets. OpenStreetMap might have “street” in the name, but we do much more. Natural features, bus routes, footpaths and cycleways, administrative boundaries, shops, rivers and canals… you name it.
+Помимо этого, коммерческие поставщики данных не так часто обновляют свои данные, хорошо если раз в месяц. Новые дороги и здания могут долгое время отсутствовать на таких сервисах. Чего нельзя сказать про OpenStreetMap, где данные обновляются постоянно. К тому же, вы можете получать эти обновления раз в день, раз в час или даже каждую минуту, смотря как часто вам надо.
 
-Commercial providers also only update their data every month, if you’re lucky. New roads and buildings can be missing from their datasets long after they’ve opened. OpenStreetMap data is constantly updated, and you can get those updates every day, every hour or even every minute if you want.
+Вся информация вносится волонтерами-картографами (на данный момент в сервисе зарегистрировано более 1 млн. человек и эта цифра с каждым днем только растет), которые действительно хорошо знают свои территории. Именно поэтому OpenStreetMap нередко обгоняет коммерческих поставщиков данных.
 
-All this is contributed by our volunteers (over 1,000,000 signed up so far, and growing every day) – the people who really know about their area. That’s why OpenStreetMap often shows new developments before any commercial provider.
+# Это проще, чем вы думаете
 
-# It’s easier than you think
-
-There’s no limit to what you can do with OpenStreetMap. Yet it needn’t take long to get started. You can switch to OSM in under an hour using tools like the easy [Leaflet](http://leafletjs.com/) and MapQuest Open’s [free tiles](http://developer.mapquest.com/web/products/open/map). Read the rest of this site to get started with the possibilities.
+Нет предела тому, что вы можете делать с OpenStreetMap. Но в любом случае в начале вам понадобиться немного времени. Для того, чтобы перейти на OSM нужен всего лишь час. В этом вам поможет такой простой инструмент как [Leaflet](http://leafletjs.com/) и поставщики [бесплатных тайлов](http://localhost:4000/providers/). Ознакомьтесь с другими разделами этого сайта, чтобы знать про все возможности OSM.

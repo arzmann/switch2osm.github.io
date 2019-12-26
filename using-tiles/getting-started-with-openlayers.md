@@ -1,26 +1,26 @@
 ---
 layout: docs
-title: Getting started with OpenLayers
+title: Начинаем работать с OpenLayers
 permalink: /using-tiles/getting-started-with-openlayers/
 ---
 
-## Introduction
+## Введение
 
-[OpenLayers](http://openlayers.org/) is a complete JavaScript library for embedding maps. It uses a permissive BSD open-source license so can be incorporated into any site without legal worries. Its source code is available on [GitHub](https://github.com/openlayers/ol3/).
+[OpenLayers](http://openlayers.org/) - это многофункциональная библиотека на JavaScript для встраивания карт. Она распространяется под лицензией BSD для программного обеспечения с открытым исходным кодом, что позволяет ее использовать абсолютно на любом сайте без каких-либо дополнительных юридических ограничений. Ее исходный текст доступен на [GitHub](https://github.com/openlayers/ol3/).
 
-Here, we restrict ourselves to a small, self-contained example and refer to the official [tutorials](http://openlayers.org/en/latest/examples/) and [API](http://openlayers.org/en/latest/apidoc/) for elaborate usages.
+На этом сайте мы ограничимся лишь небольшим примером, демонстрирующим возможности библиотеки, а также приведем ссылки на официальные [руководства](http://openlayers.org/en/latest/examples/) и [API](http://openlayers.org/en/latest/apidoc/) для использования этой замечательной библиотеки.
 
-## Getting started
+## Начало работы
 
-Copy the following content to a file `openlayers.html` and open it in your browser:
+Создайте файл `openlayers.html`, скопируйте в него нижеприведенный код, сохраните и откройте в браузере:
 
 {% highlight html %}
 {% include openlayers.html %}
 {% endhighlight %}
 
-# Further links
-You want to …
+# Дополнительные ссылки
+Если вы хотите:
 
-* use a different background? → Openlayers natively supports [TMS](https://en.wikipedia.org/wiki/Tile_Map_Service) and [WMS](https://en.wikipedia.org/wiki/Web_Map_Service). See [Openlayers official examples](http://openlayers.org/en/latest/examples/) and [the API](http://openlayers.org/en/latest/apidoc/) to see which options are supported.
-* add all of your company's locations? → Provide them as [GeoJSON](http://geojson.org/) and [include them](http://openlayers.org/en/latest/examples/select-features.html) in the map.
-* use a different map projection? → OpenLayers support all Proj4 projections as long as you include [proj4js](http://proj4js.org/) JavaScript library. Moreover, [client-side raster reprojection](http://openlayers.org/en/latest/examples/reprojection-by-code.html) is supported so you can use OpenStreetMap tiles in your local projection.
+* использовать другой фон → OpenLayers изначально поддерживает [TMS](https://en.wikipedia.org/wiki/Tile_Map_Service) и [WMS](https://ru.wikipedia.org/wiki/Web_Map_Service). Посмотрите [здесь](http://openlayers.org/en/latest/examples/) и [здесь](http://openlayers.org/en/latest/apidoc/), чтобы узнать какие есть еще опции.
+* обозначить все места, где располагается ваша компания? → Сохраните их координаты в файле [GeoJSON](http://geojson.org/) и они [появятся](http://openlayers.org/en/latest/examples/select-features.html) на карте.
+* использовать другую картографическую проекцию? → OpenLayers поддерживает все проекции [proj4js](http://proj4js.org/), если вы включили библиотеку proj4js JavaScript. Кроме того, поддерживается растровая [репроекция](http://openlayers.org/en/latest/examples/reprojection-by-code.html) на стороне клиента, так что можно использовать тайлы OpenStreetMap в локальной проекции.

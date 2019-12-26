@@ -1,273 +1,275 @@
 ---
 layout: docs
-title: Manually building a tile server (18.04 LTS)
+title: Ручная сборка тайл-сервера (18.04 LTS)
 permalink: /serving-tiles/manually-building-a-tile-server-18-04-lts/
 ---
 
-This page describes how to install, setup and configure all the necessary software to operate your own tile server. The step-by-step instructions are written for [Ubuntu Linux](http://www.ubuntu.com/) 18.04 LTS (Bionic Beaver).
+На этой странице рассказывается, как установить и настроить все необходимое программное обеспечение для работы собственного тайл-сервера. Пошаговая инструкция написаны для [Ubuntu Linux](http://www.ubuntu.com/) 18.04 LTS (Bionic Beaver).
 
-# Software installation
+# Установка программного обеспечения
 
-The OSM tile server stack is a collection of programs and libraries that work together to create a tile server. As so often with OpenStreetMap, there are many ways to achieve this goal and nearly all of the components have alternatives that have various specific advantages and disadvantages. This tutorial describes the most standard version that is similar to that used on the main OpenStreetMap.org tile servers.
+Тайл-сервер - это набор определенных программ и библиотек, которые взаимодействуя между собой обеспечивают генерацию тайлов и их предоставление пользователям. Как это распространено в мире OpenStreetMap, существует несколько различных конфигураций тайл-серверов, так как почти у всех инструментов есть альтернативы со своими плюсами и минусами. Данное руководство описывает запуск наиболее стандартного тайл-сервара, аналогичного тому, который используется на серверах OpenStreetMap.org.
 
-It consists of 5 main components: mod_tile, renderd, mapnik, osm2pgsql and a postgresql/postgis database. Mod_tile is an apache module that serves cached tiles and decides which tiles need re-rendering - either because they are not yet cached or because they are outdated. Renderd provides a priority queueing system for rendering requests to manage and smooth out the load from rendering requests. Mapnik is the software library that does the actual rendering and is used by renderd.
+Тайл-сервер - это пять основных компонентов: mod_tile, renderd, mapnik, osm2pgsql и база данных postgresql/postgis. Mod-tile - это модуль Apache, который проверяет наличие тайла и его актуальность. Если тайл устарел, то модуль запрашивает его обновление. Renderd - утилита, обеспечивающая формирование очереди запросов на обновление тайлов и определение приоритетов с целью уменьшения нагрузки на сервер. Mapnik - библиотека, которая собственно и генерирует (рендерит) тайлы, согласно очереди предоставленной ей Renderd.
 
-Note that these instructions are have been written and tested against a newly-installed Ubuntu 18.04 server. If you have got other versions of some software already installed (perhaps you upgraded from an earlier Ubuntu version, or you set up some PPAs to load from) then you may need to make some adjustments.
+Обратите внимание, что данная инструкция была написана и протестирована на вновь установленном сервере Ubuntu 18.04. Если у вас уже установлены другие версии некоторых программ (возможно, вы обновились с более ранней версии Ubuntu, или вы настроили загрузку некоторых PPA), то вам, возможно, потребуется внести некоторые изменения.
 
-In order to build these components, a variety of dependencies need to be installed first:
+Для того, чтобы установить эти компоненты, необходимо сначала установить различные зависимости:
 
     sudo apt install libboost-all-dev git-core tar unzip wget bzip2 build-essential autoconf libtool libxml2-dev libgeos-dev libgeos++-dev libpq-dev libbz2-dev libproj-dev munin-node munin libprotobuf-c0-dev protobuf-c-compiler libfreetype6-dev libtiff5-dev libicu-dev libgdal-dev libcairo-dev libcairomm-1.0-dev apache2 apache2-dev libagg-dev liblua5.2-dev ttf-unifont lua5.1 liblua5.1-dev libgeotiff-epsg
 
-Say yes to install. This will take a while, so go and have a cup of tea. This list includes various utilities and libraries, the Apache web server, and "carto" which is used to convert Carto-CSS stylesheets into something that "mapnik" the map renderer can understand. When that is complete, install the second set of prerequisites:
-# Installing postgresql / postgis
+Эта операция займет некоторое время, так что можно даже успеть выпить чашку чая. Этот список включает в себя различные утилиты и библиотеки, например, веб-сервер Apache и "carto“, который используется для преобразования таблиц стилей Carto-CSS в то, что ”mapnik" уже может потом использовать при генерации (рендеринге) тайлов. Когда установка завершится, установите второй набор необходимых компонентов:
+# Установка postgresql / postgis
 
-On Ubuntu there are pre-packaged versions of both postgis and postgresql, so these can simply be installed via the Ubuntu package manager.
+В Ubuntu есть готовые версии как postgis, так и postgresql, поэтому их можно просто установить с помощью менеджера пакетов Ubuntu.
 
     sudo apt-get install postgresql postgresql-contrib postgis postgresql-10-postgis-2.4 postgresql-10-postgis-scripts
 
-Here "postgresql" is the database we're going to store map data and "postgis" adds some extra graphical support to it. Again, say yes to install.
+"postgresql“ - это база данных, в которой мы будем хранить данные карты, а ”postgis" добавляет к ней дополнительную графическую поддержку.
 
-Now you need to create a postgis database. The defaults of various programs assume the database is called gis and we will use the same convention in this tutorial, although this is not necessary. Substitute your username for renderaccount where is is used below. This should be the username that will render maps with Mapnik.
+Теперь вам нужно создать базу данных Postgis. По умолчанию различные программы предполагают, что база данных называется gis. Мы тоже будем использовать в своей инструкции такое же название, хотя в этом нет никакой необходимости. Вы должны указать свое имя пользователя вместо "renderaccount", где оно используется ниже. Это должно быть имя пользователя, который будет генерировать тайлы с помощью Mapnik.
 
     sudo -u postgres -i
     createuser renderaccount # answer yes for superuser (although this isn't strictly necessary)
     createdb -E UTF8 -O renderaccount gis
 
-While still working as the "postgres" user, set up PostGIS on the PostgreSQL database (again, substitute your username for renderaccount below):
+Пока вы всё ещё работаете от имени пользователя "postgres", установите PostGIS на базу PostgreSQL (опять же, заменив renderaccount на своё имя пользователя):
 
     psql
 
-(that'll put you at a "postgres=#" prompt)
+(вы увидите приглашение “postgres=#”)
 
     \c gis
 
-(it'll answer "You are now connected to database 'gis' as user 'postgres'".)
+(в ответ вы получите “You are now connected to database ‘gis’ as user ‘postgres’”)
 
     CREATE EXTENSION postgis;
 
-(it'll answer CREATE EXTENSION)
+(в ответ вы получите "CREATE EXTENSION")
 
     CREATE EXTENSION hstore;
 
-(it'll answer CREATE EXTENSION)
+(в ответ вы получите "CREATE EXTENSION")
 
     ALTER TABLE geometry_columns OWNER TO renderaccount;
 
-(it'll answer ALTER TABLE)
+(в ответ вы получите "ALTER TABLE")
 
     ALTER TABLE spatial_ref_sys OWNER TO renderaccount;
 
-(it'll answer ALTER TABLE)
+(в ответ вы получите "ALTER TABLE")
 
     \q
 
-(it'll exit psql and go back to a normal Linux prompt)
+(при этом вы выйдите из psql и вернётесь к обычной командной строке Linux)
 
     exit
 
-(to exit back to be the user that we were before we did "sudo -u postgres -i" above)
+(чтобы вернуться к пользователю, под которым вы работали до команды "sudo -u postgres -i")
 
-If you haven't already created one create a Unix user for this user, too, choosing a password when prompted:
+Если вы ещё не создали, то также создайте Unix-пользователя с соответствующим именем, введя пароль по запросу:
 
     sudo useradd -m renderaccount
     sudo passwd renderaccount
 
-Again, above replace "renderaccount" with the non-root username that you chose.
-## Installing osm2pgsql
+Опять же, замените “renderaccount" на то имя пользователя (не root), которое вы ранее выбрали.
 
-We will need install various bits of software from source. The first of this is "osm2pgsql". Various tools to import and manage OpenStreetMap data into a database exist. Here we'll use "osm2pgsql", which is probably the most popular.
+## Установка osm2pgsql
+
+Часть программного обеспечения необходимо собрать из исходников. Первое из них - это “osm2pgsql”. Есть разные инструменты для импорта и управления данными OpenStreetMap в базах данных, но мы будем использовать именно этот, так как он наиболее популярный.
 
     mkdir ~/src
     cd ~/src
     git clone git://github.com/openstreetmap/osm2pgsql.git
     cd osm2pgsql
 
-The build mechanism used by osm2pgsql has changed since older versions, so we'll need to install some more prerequisites for that:
+Механизм сборки osm2pgsql изменился по сравнению со старыми версиями, так что вам потребуется установить ещё немного зависимостей:
 
     sudo apt install make cmake g++ libboost-dev libboost-system-dev libboost-filesystem-dev libexpat1-dev zlib1g-dev libbz2-dev libpq-dev libgeos-dev libgeos++-dev libproj-dev lua5.2 liblua5.2-dev
 
-Again, say yes to install.
+Опять же, ответьте yes для установки.
 
     mkdir build && cd build
     cmake ..
 
-(the output from that should end with "build files have been written to")
+(Вывод этих команд должен закончится сообщениями "build files have been written to")
 
     make
 
-(the output from that should finish with "[100%] Built target osm2pgsql")
+(Эта команда должна завершиться сообщением "[100%] Built target osm2pgsql")
 
     sudo make install
 
 # Mapnik
 
-Next, we'll install Mapnik. We'll use the default version in Ubuntu 18.04:
+Далее устанавливаем Mapnik. Мы будем использовать ту версию, которая идет по умолчанию в Ubuntu 18.04:
 
     sudo apt-get install autoconf apache2-dev libtool libxml2-dev libbz2-dev libgeos-dev libgeos++-dev libproj-dev gdal-bin libmapnik-dev mapnik-utils python-mapnik
 
-We'll check that Mapnik has been installed correctly:
+Проверим, правильно ли установился Mapnik:
 
     python
     >>> import mapnik
     >>>
 
-If python replies with the second chevron prompt >>> and without errors, then Mapnik library was found by Python. Congratulations! You can leave Python with this command:
+Если python в ответ снова выводит приглашение >>> без ошибок, значит, библиотека Mapnik найдена Python. Поздравляем! Вы можете выйти из Python с помощью команды:
 
     >>> quit()
 
-# Install mod_tile and renderd
+# Установка mod_tile и renderd
 
-Next, we'll install mod_tile and renderd. "mod_tile" is an Apache module that handles requests for tiles; "renderd" is a daemon that actually renders tiles when "mod_tile" requests them. We'll use the "switch2osm" branch of https://github.com/SomeoneElseOSM/mod_tile, which is itself forked from https://github.com/openstreetmap/mod_tile, but modified so that it supports Ubuntu 18.04, and with a couple of other changes to work on a standard Ubuntu server rather than one of OSM's rendering servers.
+Далее мы установим mod_tile и renderd. "mod_tile" - это модуль Apache, который обрабатывает запросы на тайлы. "renderd" - это фоновая программа, которая фактически генерирует (рендерит) тайлы, когда "mod_tile" запрашивает их. Мы будем использовать форк ["mod_tile"](https://github.com/openstreetmap/mod_tile) - ["switch2osm"](https://github.com/SomeoneElseOSM/mod_tile), который модифицирован для Ubuntu 18.04 и использованию на стандартном сервере Ubuntu, а не на одном из серверов генерации (рендеринга) OSM.
 
-## Compile the mod_tile source code:
+## Компиляция mod_tile из исходников:
 
     cd ~/src
     git clone -b switch2osm git://github.com/SomeoneElseOSM/mod_tile.git
     cd mod_tile
     ./autogen.sh
 
-(that should finish with "autoreconf: Leaving directory '.'".)
+(в конце вы должны получить "autoreconf: Leaving directory '.'")
 
     ./configure
 
-(that should finish with "config.status: executing libtool commands")
+(в конце вы должны получить "config.status: executing libtool commands")
 
     make
 
-Note that some "worrying" messages will scroll up the screen here. However it should finish with "make[1]: Leaving directory '/home/renderaccount/src/mod_tile'".
+Обратите внимание, что на этом этапе будут выскакивать некоторые "предупреждающие" сообщения. Тем не менее, всё должно закончиться сообщением "make[1]: Leaving directory '/home/renderaccount/src/mod_tile'".
 
     sudo make install
 
-(that should finish with "make[1]: Leaving directory '/home/renderaccount/src/mod_tile'")
+(Это должно закончиться сообщением "make[1]: Leaving directory '/home/renderaccount/src/mod_tile'")
 
     sudo make install-mod_tile
 
-(that should finish with "chmod 644 /usr/lib/apache2/modules/mod_tile.so")
+(Это должно закончиться сообщением "chmod 644 /usr/lib/apache2/modules/mod_tile.so")
 
     sudo ldconfig
 
-(that shouldn't reply with anything)
-# Stylesheet configuration
+(Тут не должно быть никаких сообщений)
+# Настройка таблицы стилей
 
-Now that all of the necessary software is installed, you will need to download and configure a stylesheet.
+Теперь, когда все необходимое программное обеспечение установлено, вам нужно будет скачать и настроить таблицу стилей.
 
-The style we'll use here is the one that use by the "standard" map on the openstreetmap.org website. It's chosen because it's well documented, and should work anywhere in the world (including in places with non-latin placenames). There are a couple of downsides though - it's very much a compromise designed to work globally, and it's quite complicated to understand and modify, should you need to do that.
+Мы будем использовать тот же самый картостиль, который вы можете увидеть на сайте openstreetmap.org. Выбор обусловлен тем, что он достаточно хорошо задокументирован и работает практически в любой точки мира, в том числе и в местах с нелатинскими названиями. Однако у него есть несколько недостатков. Главные из которых - это предельная усредненность для работы в глобальном масштабе, также в нем довольно сложно разобраться и оперативно модифицировать в случае необходимости.
 
-The home of "OpenStreetMap Carto" on the web is https://github.com/gravitystorm/openstreetmap-carto/ and it has it's own installation instructions at https://github.com/gravitystorm/openstreetmap-carto/blob/master/INSTALL.md although we'll cover everything that needs to be done here.
+Несмотря на то, что у "OpenStreetMap Carto" есть свой домашний [сайт](https://github.com/gravitystorm/openstreetmap-carto/) и собственные [инструкции](https://github.com/gravitystorm/openstreetmap-carto/blob/master/INSTALL.md) по установке, все же мы расскажем, что необходимо сделать для его настройки.
 
-Here we're assuming that we're storing the stylesheet details in a directory below "src" below the home directory of the "renderaccount" user (or whichever other one you are using)
+Предполагается, что мы разместим файлы стиля в подкаталоге src домашней директории пользователя "renderaccount" (или какое там вы использовали).
 
     cd ~/src
     git clone git://github.com/gravitystorm/openstreetmap-carto.git
     cd openstreetmap-carto
 
-Next, we'll install a suitable version of the "carto" compiler. This is later than the version that ships with Ubuntu, so we need to do:
+Далее установим подходящую версию компилятора carto. Она новее, чем версия, идущая вместе с Ubuntu, так что нам необходимо сделать следующее:
 
     sudo apt install npm nodejs
     sudo npm install -g carto
     carto -v
 
-That should respond with a number that is at least as high as:
+В ответ мы получем значение, которое должно быть не меньше, чем:
 
     carto 1.1.0 (Carto map stylesheet compiler)
 
-Then we convert the carto project into something that Mapnik can understand:
+Затем преобразуем проект carto в то, что понимает Mapnik:
 
     carto project.mml > mapnik.xml
 
-You now have a Mapnik XML stylesheet at /home/renderaccount/src/openstreetmap-carto/mapnik.xml .
-# Loading data
+Теперь у вас есть XML-стиль Mapnik в файле /home/renderaccount/src/openstreetmap-carto/mapnik.xml.
+# Загрузка данных
 
-Initially, we'll load only a small amount of test data. Other download locations are available, but "download.geofabrik.de" has a wide range of options. In this example we'll download the data for Azerbaijan, which is about 17Mb.
+В качестве примера мы загрузим небольшой объем тестовых данных. Их можно скачать в разных местах, но "[download.geofabrik.de](http://download.geofabrik.de)" предлагает весьма широкий выбор. Попробуем, например, скачать Азербайджан (~19 Мб).
 
-Browse to http://download.geofabrik.de/asia/azerbaijan.html and note the "This file was last modified" date (e.g. "2017-02-26T21:43:02Z"). We'll need that later if we want to update the database with people's susbsequent changes to OpenStreetMap. Download it as follows:
+Зайдите на страничку ["Azerbaijan"](http://download.geofabrik.de/asia/azerbaijan.html) на сайте Geofabrik и обратите внимание на дату "This file was modified" (что-то вида "2019-12-22T21:59:02Z"). Нам она потребуется, если мы захотим после обновлять свою базу данных. Скачайте данные по Азербайджану следующим образом:
 
     mkdir ~/data
     cd ~/data
     wget http://download.geofabrik.de/asia/azerbaijan-latest.osm.pbf
 
-The following command will insert the OpenStreetMap data you downloaded earlier into the database. This step is very disk I/O intensive; importing the full planet might take many hours, days or weeks depending on the hardware. For smaller extracts the import time is much faster accordingly, and you may need to experiment with different -C values to fit within your machine's available memory.
+Следующая команда вставит в базу данных скачанные данные из OpenStreetMap. Во время этой операции значительно увеличится нагрузка на жесткий диск. Импорт всей планеты может занять несколько часов, дней или даже недель в зависимости от мощности вашего оборудования. Небольшие выгрузки, конечно, импортируются значительно быстрее, но в любом случае вам может потребоваться поэкспериментировать с различными значениями -C, чтобы уместиться в доступную оперативную память вашего сервера.
 
     osm2pgsql -d gis --create --slim  -G --hstore --tag-transform-script ~/src/openstreetmap-carto/openstreetmap-carto.lua -C 2500 --number-processes 1 -S ~/src/openstreetmap-carto/openstreetmap-carto.style ~/data/azerbaijan-latest.osm.pbf
 
-It's worth explaining a little bit about what those options mean:
+Полезно пояснить, что означают эти опции:
 
     -d gis
 
-The database to work with ("gis" used to be the default; now it must be specified).
+База данных, с которой мы работаем ("gis" использовалась по умолчанию, но теперь это надо указывать)
 
     --create
 
-Load data into an empty database rather than trying to append to an existing one.
+Загрузить данные в пустую базу вместо того, чтобы пытаться дополнить уже имеющиеся.
 
     --slim
 
-osm2pgsql can use different table layouts; "slim" tables works for rendering.
+osm2pgsql может использовать различные схемы таблиц, "slim" подходит для рендеринга.
 
     -G
 
-Determines how multipolygons are processed.
+Указывает, как обрабатывать мультиполигоны.
 
     --hstore
 
-Allows tags for which there are no explicit database columns to be used for rendering.
+Позволяет использовать для рендеринга тэги, для которых нет отдельных колонок в базе данных.
 
     --tag-transform-script
 
-Defines the lua script used for tag processing. This an easy is a way to process OSM tags before the style itself processes them, making the style logic potentially much simpler.
+Указывает на lua-скрипт, используемый при обработке тэгов. Это простейший способ обрабатывать тэги OSM до того, как они будут обработаны с помощью style-файла, чтобы сделать логику стиля потенциально проще.
 
     -C 2500
 
-Allocate 2.5 Gb of memory to osm2pgsql to the import process. If you have less memory you could try a smaller number, and if the import process is killed because it runs out of memory you'll need to try a smaller number or a smaller OSM extract..
+Выделяет 2,5 Гб оперативной памяти для osm2pgsql на процесс импорта. Если у вас недостаточно памяти, вы можете попробовать уменьшить это значение, а если процесс импорта будет убит из-за нехватки памяти, вам потребуется уменьшить это число или попробовать выгрузку OSM меньшего объёма.
 
     --number-processes 1
 
-Use 1 CPU. If you have more cores available you can use more.
+Использует один процесс. Если у вас есть больше процессорных ядер, вы можете указать больше.
 
     -S
 
-Create the database columns in this file (actually these are unchanged from "openstreetmap-carto")
+Создаёт колонки в базе данных, как указано в этом файле (в данном случае они не будут отличаться от "openstreetmap-carto")
 
-The final argument is the data file to load.
+Последним параметром указан файл для загрузки.
 
-That command will complete with something like "Osm2pgsql took 238s overall".
-## Shapefile download
+Команда завершится сообщением навроде "Osm2pgsql took 238s overall".
+## Загрузка shape-файла
 
-Although most of the data used to create the map is directly from the OpenStreetMap data file that you downloaded above, some shapefiles for things like low-zoom country bondaries are still needed. To download and index these:
+Несмотря на то, что практически вся необходимая информация для генерации тайлов берётся непосредственно из выгрузки OpenStreetMap, которую вы скачали чуть ранее, все же потребуются некоторые shape-файлы, такие, как границы государств для низких масштабных уровней. Чтобы скачать и проиндексировать их:
 
     cd ~/src/openstreetmap-carto/
     scripts/get-shapefiles.py
 
-This process involves a sizable download and may take some time. When complete it will display "...script completed.".
-## Fonts
+Этот процесс предполагает скачивание значительного объема информации с интернета и может занять какое-то время. По завершении он должен сообщить "...script completed."
+## Шрифты
 
-The names used for places around the world aren't always written with latin characters (the familar western alphabet a-z). To install the necessary fonts do the following:
+Названия, используемые для обозначения мест по всему миру, не всегда пишутся латинскими буквами (обычный алфавит "a"-"z"). Для установки необходимых шрифтов сделайте следующее:
 
     sudo apt-get install fonts-noto-cjk fonts-noto-hinted fonts-noto-unhinted ttf-unifont
 
-OpenSteetMap Carto's own installation instructions also suggest installing "Noto Emoji Regular" from source. That is needed for the emojis in an American shop name, apparently. All the other international fonts that are likely to be needed (including ones often not supported) are including in the list just installed.
-# Setting up your webserver
-## Configure renderd
+В инструкции, написанной разработчиками OpenSteetMap Carto, также предлагается установить из исходного кода (???что это значит???) "Noto Emoji Regular". Но он может пригодиться только для отображения эмодзи в названиях американских магазинов. Все другие международные шрифты, которые могут понадобиться в работе (в том числе те, которые часто не поддерживаются), включены в список только что установленных.
+# Настройка вашего веб-сервера
+## Настраиваем renderd
 
-The config file for "renderd" is "/usr/local/etc/renderd.conf". Edit that with a text editor such as nano:
+Конфиг для "renderd" находится в файле "/usr/local/etc/renderd.conf". Отредактируйте его с помощью текстового редактора, например, nano:
 
     sudo nano /usr/local/etc/renderd.conf
 
-A couple of lines in here may need changing. In the "renderd" section:
+Потребуется изменить несколько строк. В секции "renderd":
 
     num_threads=4
 
-If you've only got 2Gb or so of memory you'll want to reduce this to 2.
-The "ajt" section corresponds to a "named map style" called "ajt". You can have more than one of these sections if you want, provided that the URI is different for each. The "XML" line will need changing to something like:
+Если у вас только 2 Гб памяти или около того, вы можете захотеть уменьшить это значение до 2.
+
+Секция "ajt" соответствует картостилю с именем "ajt". У вас может быть более одной такой секции, использующей разные URI для каждой. Строку "XML" следует изменить на что-то вроде:
 
     XML=/home/renderaccount/src/openstreetmap-carto/mapnik.xml
 
-You'll want to change "renderaccount" to whatever non-root username you used above.
+Вы можете изменить "renderaccount" на имя того не-root-пользователя, что использовали выше.
 
     URI=/hot/
 
-That was chosen so that the tiles generated here can more easily be used in place of the HOT tile layer at OpenStreetMap.org. You can use something else here, but "/hot/" is as good as anything.
-## Configuring Apache
+Это выбрано для того, чтобы сгенерированные тайлы, можно было проще использовать заместо слоя HOT на сайте OpenStreetMap.org. Вы можете написать тут что-то ещё, но /hot тоже неплохо.
+## Настраиваем Apache
 
     sudo mkdir /var/lib/mod_tile
     sudo chown renderaccount /var/lib/mod_tile
@@ -275,25 +277,25 @@ That was chosen so that the tiles generated here can more easily be used in plac
     sudo mkdir /var/run/renderd
     sudo chown renderaccount /var/run/renderd
 
-We now need to tell Apache about "mod_tile", so with nano (or another editor):
+Вы теперь должны сказать Apache о модуле mod_tile, для чего с помощью nano (или другого редактора)
 
     sudo nano /etc/apache2/conf-available/mod_tile.conf
 
-Add the following line to that file:
+добавьте в файл следующую строку:
 
     LoadModule tile_module /usr/lib/apache2/modules/mod_tile.so
 
-and save it, and then run:
+затем сохраните его и выполните::
 
     sudo a2enconf mod_tile
 
-That will say that you need to run "service apache2 reload" to activate the new configuration; we'll not do that just yet.
+Вы получите сообщение, что необходимо выполнить "service apache2 reload" для активации новой конфигурации, но пока этого делать не нужно.
 
-We now need to tell Apache about "renderd". With nano (or another editor):
+Теперь надо рассказать Apache про "renderd". С помощью nano (или иного редактора)
 
     sudo nano /etc/apache2/sites-available/000-default.conf
 
-And add the following between the "ServerAdmin" and "DocumentRoot" lines:
+добавьте следующий код между строками "ServerAdmin" и "DocumentRoot":
 
     LoadTileConfigFile /usr/local/etc/renderd.conf
     ModTileRenderdSocketName /var/run/renderd/renderd.sock
@@ -302,62 +304,66 @@ And add the following between the "ServerAdmin" and "DocumentRoot" lines:
     # Timeout before giving up for a tile to be rendered that is otherwise missing
     ModTileMissingRequestTimeout 30
 
-And reload apache twice:
+И дважды перезапустите Apache:
 
     sudo service apache2 reload
     sudo service apache2 reload
 
-(I suspect that it needs doing twice because Apache gets "confused" when reconfigured when running)
+(Почему это нужно сделать два раза? Подозреваю, что Apache слегка "тупит", когда перенастраивается, будучи запущенным).
 
-If you point a web browser at: http://yourserveripaddress/index.html you should get Ubuntu / apache's "It works!" page.
+Если вы откроете в web-браузере адрес http://адрес-вашего-сервера/index.html, то должны увидеть страницу Ubuntu/Apache "It work!"
 
-(if you don't know what IP address it will have been assigned you can likely use "ifconfig" to find out - if the network configuration is not too complicated it'll probably be the "inet addr" that is not "127.0.0.1"). If you're using a server at a hosting provider then it's likely that your server's internal address will be different to the external address that has been allocated to you, but that external IP address will have already been sent to you and it'll probably be the one that you're accessing the server on currently.
+(Если вы не знаете выданный серверу IP-адрес, то вы можете, скорее всего, можете использовать ifconfig чтобы узнать - если только конфигурации сети не является чересчур сложной - адрес должен быть в строке "inet addr", но не "127.0.0.1").
+Если вы используете сервер у хостинг-провайдера, то, возможно, что внутренний адрес сервера будет отличаться от внешнего, выданного вам, но внешний IP уже должен быть у вас и, вероятно, вы уже работаете с сервером именно по этому адресу.
 
-Note that this is just the "http" (port 80) site - you'll need to do a little bit more Apache configuration if you want to enable https, but that's out of the scope of these instructions. However, if you use "Let's Encrypt" to issue certificates then the process of setting that up can also configure the Apache HTTPS site as well.
-## Running renderd for the first time
+Обратите внимание, что этот сайт работает только по http (порт 80), вам потребуется сделать больше, чтобы включить в Apache https, но это выходит за рамки нашей инструкции. Тем не менее, если вы используете "Let's Encrypt" для выпуска сертификатов,
+то процесс настройки его может также настраивать использование https в Apache.
 
-Next, we'll run renderd to try and render some tiles. Initially we'll run it in the foreground so that we can see any errors as they occur:
+## Запускаем renderd первый раз
+
+Теперь мы запустим renderd, чтобы сгенерировать несколько тайлов. Изначально мы запустим его так, чтобы можно было видеть ошибки по мере их появления:
 
     renderd -f -c /usr/local/etc/renderd.conf
 
-You may see some warnings here - don't worry about those for now. You shouldn't get any errors. If you do, save the full output in a pastebin and ask a question about the problem somewhere like help.openstreetmap.org (linking to the pastebin - don't include all the text in the question).
+Вы можете увидеть несколько предупреждений, пока не обращайте на них внимания. Вам надо не получить ошибок. Если они будут, сохраните полный вывод и через сайт типа pastebin.com сообщите о проблеме где-нибудь, например, на help.openstreetmap.org (дайте ссылку на pastebin.com - не включайте весь текст в вопрос).
 
-Point a web browser at: http://yourserveripaddress/hot/0/0/0.png
+Введите в своем браузере следующий адрес: http://адрес-вашего-сервера/hot/0/0/0.png
 
-You should see a map of the world in your browser and some more debug on the command line, including "DEBUG: START TILE" and "DEBUG: DONE TILE". Ignore any "DEBUG: Failed to read cmd on fd" message - it is not an error. If you don't get a tile and get other errors again save the full output in a pastebin and ask a question about the problem somewhere like help.openstreetmap.org.
+Вы должны увидеть карту всего мира в браузере и отладочную информацию в консоли, в том числе сообщения "DEBUG: START TILE" и "DEBUG: DONE TILE". Игнорируйте "DEBUG: Failed to read cmd on fd" - это не ошибки. Если вы не получили изображение тайла или получили какие-либо ошибки - снова сохраните их в pastebin и задайте вопрос где-нибудь на help.openstreetmap.org.
 
-If that all works, press control-c to stop the foreground rendering process.
-## Running renderd in the background
+Если все работает, нажмите CTRL-C, чтобы завершить приложение рендеринга.
+## Запуск renderd в фоновом режиме
 
-Next we'll set up "renderd" to run in the background. First, edit the "~/src/mod_tile/debian/renderd.init" file so that "RUNASUSER" is set to the non-root account that you have used before, such as "renderaccount", then copy it to the system directory:
+Далее мы настроим "renderd" для запуска в фоновом режиме. Для начала, отредактируйте файл "~/src/mod_tile/debian/renderd.init" и укажите в качестве RUNASUSER того не-root-пользователя типа "renderaccount", которым вы использовали ранее, далее скопируйте
+файл в системную директорию:
 
     nano ~/src/mod_tile/debian/renderd.init
     sudo cp ~/src/mod_tile/debian/renderd.init /etc/init.d/renderd
     sudo chmod u+x /etc/init.d/renderd
     sudo cp ~/src/mod_tile/debian/renderd.service /lib/systemd/system/
 
-The "renderd.service" file is a "systemd" service file. The version used here just calls old-style init commands. In order to test that the start command works:
+Файл "renderd.service" - это файл сервиса "systemd". Используемая тут версия просто вызывает старые init-команды. Чтобы убедиться, что команда start работает, выполните:
 
     sudo /etc/init.d/renderd start
 
-(that should reply with "[ ok ] Starting renderd (via systemctl): renderd.service".)
+(должно вывести "[ ok ] Starting renderd (via systemctl): renderd.service".)
 
-To make it start automatically every time:
+Чтобы он всегда запускался автоматически:
 
     sudo systemctl enable renderd
 
-# Viewing tiles
+# Просмотр тайлов
 
-In order to see tiles, we’ll cheat and use an html file “sample_leaflet.html” in mod_tile’s “extras” folder. Just open that file in a web browser on the machine where you installed the tile server. If that isn’t possible because you’re installing on a server without a local web browser, you can edit it to replace “127.0.0.1” with the IP address of the server and copy it to below “/var/www/html”.
+Чтобы увидеть тайлы, для простоты (???cheat слегка вольно перевёл???) воспользуемся файлом “sample_leaflet.html” в каталлоге "extras" mod_tile. Просто откройте этот файл в браузере на машине, где вы установили тайловый сервер. Если это невозможно и вы установили его на сервер без локального веб-браузера,вы можете отредактировать файл и заменить 127.0.0.1 IP-адресом сервера, затем скопировать его в /var/www/html.
 
-From an ssh connection do:
+Из ssh-сессии запустите:
 
     tail -f /var/log/syslog | grep " TILE "
 
-(note the spaces around "TILE" there)
+(обратите внимание, что тут есть пробелы вокруг "TILE")
 
-That will show a line every time a tile is requested, and one every time rendering of one is completed.
+Эта команда будет выводить строку каждый раз, когда тайл запрашивается, а также когда рендеринг тайла завершится.
 
-When you load that page you should see some tile requests. Zoom out gradually. You’ll see requests for new tiles show up in the ssh connection. Some low-zoom tiles may take a long time (several minutes) to render for the first time, but once done they’ll be ready for the next time that they are needed.
+Когда вы будете загружать страницу, то должны будете увидеть, как поступают запросы на тайлы. Постепенно уменьшайте масштаб и вы увидите, что запросы на новые тайлы появляются в ssh-соединении. Генерация некоторых тайлов с нуля с низким масштабированием может занять достаточно времени (несколько минут), но зато они быстро загрузятся в следующий раз.
 
-Congratulations. Head over to the [using tiles](http://switch2osm.github.io/using-tiles/) section to create a map that uses your new tile server.
+Поздравляем! Теперь вам нужно ознакомиться с разделом "[Тайлы](/using-tiles/)", чтобы сделать карту, которая бы использовала ваш новый тайл-сервер.

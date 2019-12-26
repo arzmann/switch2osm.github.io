@@ -1,27 +1,27 @@
 ---
 layout: docs
-title: Using Tiles
+title: Использование тайлов
 permalink: /using-tiles/
 ---
 
-You can switch a website to OpenStreetMap in under an hour. Choose a JavaScript API and a tile provider, and you’re ready to go. Then, as your needs increase, you can consider custom tiles, either from a specialist provider or generated yourself.
+Для того, чтобы начать использовать OSM на своем сайте нужен всего один час. Необходимо выбрать JavaScript API, поставщика тайлов и все готово к работе. В случае, если ваши потребности начнут расти, вы всегда можете рассмотреть вариант использования тайлов, настроенных под вас, которые вы можете получить от специализированного поставщика, так и сгенерированных самостоятельно.
 
-## Choosing an API/library
+## Выбор API/библиотеки
 
-Unlike commercial online map providers, OpenStreetMap does not provide an “official” JavaScript library which you are required to use. Rather, you can use any library that meets your needs. The most popular is Leaflet, an open-source library. OpenLayers 3, another well know library, can also be a good fit.
+В мире OSM не существует одной официальной библиотеки. Вы можете выбрать ту, которая более всего отвечает вашим потребностям. Наиболее популярными библиотеками являются Leaflet (с открытым исходным кодом) и OpenLayers 3.
 
-[Getting started with Leaflet – a light web maps library](/using-tiles/getting-started-with-leaflet/)
+Инструкция по началу работы с [Leaflet](/using-tiles/getting-started-with-leaflet/) - легкой библиотекой для использования карт в web
 
-[Getting started with Openlayers –  a full feature library for web maps](/using-tiles/getting-started-with-openlayers/)
+Инструкция по началу работы с [OpenLayers](/using-tiles/getting-started-with-openlayers/) - многофункциональной библиотеки для использования карт в web
 
-## Choosing a tile provider
+## Выбор поставщика тайлов
 
-Apart from very limited testing purposes, you should not use the tiles supplied by OpenStreetMap.org itself. OpenStreetMap is a volunteer-run non-profit body and cannot supply tiles for large-scale commercial use. Rather, you should use a third party provider that makes tiles from OSM data, or generate your own.
+Не стоит использовать тайлы, размещенные на сервере OpenStreetMap.org, кроме редких исключений, например, для тестирования чего-либо. Фонд OpenStreetMap - некоммерческая организация, работающая на общественных началах, а потому она не обладает ресурсами, которые требуются для предоставления тайлов масштабным коммерческим проектам. Настоятельно рекомендуем использовать тайлы стороннего поставщика, который работает с данными из OSM, или сгенерировать свои собственные тайлы.
 
-### Free providers:
+### Бесплатные тайлы:
 
-You can get a list using the project [Leaflet-provider](http://leaflet-extras.github.io/leaflet-providers/preview/) preview although some of them are not free (require an API key).
+Ознакомьтесь с возможностями проекта [Leaflet-provider](http://leaflet-extras.github.io/leaflet-providers/preview/). Обращаем внимание, что некоторые из не бесплатны - требуется ключ API.
 
-### Paid-for providers: see list.
+### Платные поставщики тайлов: смотрите список
 
-Or go on to find out how to generate and serve your own tiles.
+Или узнавайте больше о том, как сгенерировать тайлы самостоятельно

@@ -1,47 +1,49 @@
 ---
 layout: page
-title: The Basics
+title: Основы
 permalink: /the-basics/
 ---
 
-# The challenge
-Your current map provider gives you two things:
+# Задача
 
-* A set of ’tiles’ (square map images) that are placed together to make the map
-* A JavaScript API, or equivalent library for mobile apps, to view them
+Скорее всего, ваш нынешний поставщик карт предоставляет вам две вещи:
 
-To switch to OpenStreetMap, you’ll need to replace both of these.
+* Тайлы (квадратные изображения карты), которые в итоге и составляют карту
+* JavaScript API или иную похожую библиотеку для их просмотра на мобильных устройствах 
 
-# The tiles
+Чтобы перейти на OpenStreetMap вам будет необходимо заменить обе из них.
+
+# Тайлы
 
 ![Tiles](tiles.png)
-The map tiles, images of (usually) 256 x 256 pixels each, are drawn (“rendered”) from a map database.
+Тайлы - квадратные изображения (обычно) 256х256 пикселей каждый, генерируемые из геоданных.
 
-If you currently use Google Maps, you’ll be using Google’s map tiles, hosted at google.com. Because the OpenStreetMap Foundation is a non-profit organisation with limited resources, you can’t just slot in the tiles from openstreetmap.org as a replacement (see the [Tile Usage Policy](https://wiki.openstreetmap.org/wiki/Tile_usage_policy)). Instead, you can:
+Если в настоящее время вы используете Карты Google, то вам предоставляются тайлы этого сервиса, размещенные на сайте google.com. Поскольку Фонд OpenStreetMap - некоммерческая организация, то у него ограничены ресуры. Поэтому, к сожалению, вы не можете взамен вставить тайлы напрямую с сервера openstreetmap.org (см. [Правила использования тайлов](https://wiki.openstreetmap.org/wiki/Tile_usage_policy))). Но вместо этого вы можете: 
 
-* Generate your own tiles, by downloading the free OSM map database and rendering them;
+* Сгенерировать свои собственные тайлы, бесплатно скачав базу данных OpenStreetMap и визуализировав ее
 
-* Or use a third-party supplier (some of whom charge, some are free)
+* Или использовать тайлы стороннего поставщика (часть из них бесплатна, но есть и платные сервисы)
 
-The OSM map database is called planet.osm. The full database and regular update files are both available at [planet.openstreetmap.org](http://planet.openstreetmap.org/).
+База данных OSM называется planet.osm. Полная база данных и файлы регулярных обновлений размещены по адресу: [planet.openstreetmap.org](http://planet.openstreetmap.org/).
 
-Rendering your own tiles gives you complete control over their appearance. You can customise the maps to appear any way you like. Alternatively, third-party suppliers have OSM expertise and may have ready-prepared map styles that you can use.
+Генерация своих собственных тайлов позволяет вам делать их такими, какими вы их хотите увидеть. Возможно настроить достаточно много параметров. Если же для вас это слишком сложно, то у сторонних поставщиков тайлов из данных OSM есть много готовых картостилей на все случаи жизни.
 
-# The API/library
+# API/библиотека
 
-There is no single canonical library: you can choose whichever suits your needs best. The two most popular JavaScript libraries for use with OSM tiles are:
+В мире OSM не существует одной официальной библиотеки. Вы можете выбрать ту, которая более всего отвечает вашим потребностям. Самыми популярными библиотеками на JavaScript для использования тайлов OSM являются:
 
-* OpenLayers – powerful and long-established
+* OpenLayers - мощная и проверенная временем
 
-* Leaflet – lightweight and easy-to-learn
+* Leaflet - легкая и простая в освоении
 
-If you choose to use MapQuest Open tiles (made from OSM data), you can also use the [MapQuest Open API](http://developer.mapquest.com/web/products/open/sdk). APIs are also available for mobile platforms, such as [Route-Me](https://github.com/route-me/route-me) (iOS) and [osmdroid](https://github.com/osmdroid/osmdroid) (Android).
+Если вы решили использовать тайлы MapQuest Open, в основе которых также данные OSM, то посмотрите в сторону [MapQuest Open API](http://developer.mapquest.com/web/products/open/sdk). Имеются API и для мобильных платформ: [Route-Me](https://github.com/route-me/route-me) (iOS) и [osmdroid](https://github.com/osmdroid/osmdroid) (Android).
 
-# The licence
-Unlike commercial providers’ data, OpenStreetMap is ‘open data’. The map data is available to you free-of-charge, with the freedom to copy and modify. OSM’s licence is the [Open Database Licence](http://opendatacommons.org/licenses/odbl/summary/).
+# Лицензия
 
-Your obligations are:
+В отличие от коммерческих поставщиков данных, OpenStreetMap - это открытые данные. Вы можете свободно (бесплатно) их копировать и изменять. Данные OSM выложены под лицензией ODbL ([Open Database Licence](http://opendatacommons.org/licenses/odbl/summary/)).
 
-* Attribution. You must credit OpenStreetMap with the same prominence that would be expected if you were using a commercial provider. See [OSM’s copyright guidelines](http://www.openstreetmap.org/copyright).
+Вы можете свободно использовать данные из OSM при соблюдении следующих условий:
 
-* Share-Alike. When you use any adapted version of OSM’s map data, or works produced with it, you must also offer that adapted database under the ODbL.
+* Указать авторство (атрибуция). Вы обязаны указать, что источник данных - OpenStreetMap, как бы вы это сделали, если бы использовали данные коммерческого поставщика. Обязательно ознакомьтесь с [руководством](http://www.openstreetmap.org/copyright) по указанию атрибуции.
+
+* Распространять производную работу под точно такой же лицензией (share-alike). Если вы внесли изменения в данные, которые взяли из OSM, или даже если их не было, то в любом случае вы должны распространять их под ODbL.

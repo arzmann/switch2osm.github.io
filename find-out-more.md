@@ -1,42 +1,43 @@
 ---
 layout: page
-title: Find Out More
+title: Узнайте больше
 permalink: /find-out-more/
 ---
 
-## Getting help
+## Получить помощь
 
-OpenStreetMap is a decentralised, volunteer-run project so there’s no single contact e-mail address for your queries. Instead, our community’s knowledge can help resolve any issues you might have.
+OpenStreetMap - это децентрализованный, волонтерский проект, поэтому у него нет единого адреса электронной почты для связи. Но мы уверены, что знаний нашего сообщества хватит на то, чтобы дать ответ на любой вопрос, который у вас возникнет.
 
-* [OpenStreetMap IRC](http://irc.openstreetmap.org/) (Internet Relay Chat): 24-hour live OSM chat (use channel #osm or #osm-dev)
-* [Interactive help system](http://help.openstreetmap.org/)
-* [Developer FAQ](http://wiki.openstreetmap.org/wiki/Developer_FAQ)
-* [Main FAQ](http://wiki.openstreetmap.org/wiki/FAQ)
+* [Интерактивная система помощи](http://help.openstreetmap.org/)
+* [FAQ для разработчиков](http://wiki.openstreetmap.org/wiki/Developer_FAQ)
+* [Основной FAQ](http://wiki.openstreetmap.org/wiki/FAQ)
+* [Форум OpenStreetMap](https://forum.openstreetmap.org/)
+* [RU-OSM](https://t.me/ruosm) - Telegram-канал российского сообщества OSM
+* [E-mail](board@openstreetmap.ru) Совета Российского OSM
 
-## Other tutorials on switching to OSM
-* [Using MapBox and Leaflet](http://developmentseed.org/blog/2012/jan/12/open-source-with-leaflet-and-mapbox/) (Development Seed)
-* [Kelso Cartography guide](https://github.com/nvkelso/geo-how-to/wiki)
-* [Build a server using MapServer](http://trac.osgeo.org/mapserver/wiki/RenderingOsmDataUbuntu)
+## Другие пособия по переходу на OSM
+* [Использование MapBox и Leaflet](http://developmentseed.org/blog/2012/jan/12/open-source-with-leaflet-and-mapbox/) (Development Seed)
+* [Руководство по картографии от Kelso](https://github.com/nvkelso/geo-how-to/wiki)
+* [Делаем сервер с помощью MapServer](http://trac.osgeo.org/mapserver/wiki/RenderingOsmDataUbuntu)
 
-## Editing OpenStreetMap
-* [LearnOSM.org](http://www.learnosm.org/) guide for beginners
+## Редактирование OpenStreetMap
+* [LearnOSM.org](http://www.learnosm.org/) руководство для начинающих
 
-## Books
-* [OpenStreetMap: Using and Enhancing the Free Map of the World](http://openstreetmap.info/) (English/German)
-* [OpenStreetMap: Be Your Own Cartographer](https://www.packtpub.com/openstreetmap/book) (English)
-* [OpenStreetMap: A Beginner’s Guide](http://en.flossmanuals.net/openstreetmap/) (English/French)
-* [OpenLayers 2.10 Beginners Guide](https://www.packtpub.com/openlayers-2-1-javascript-web-mapping-library-beginners-guide/book) (English)
+## Книги
+* [OpenStreetMap: Using and Enhancing the Free Map of the World](http://openstreetmap.info/) (на английском/немецком)
+* [OpenStreetMap: Be Your Own Cartographer](https://www.packtpub.com/openstreetmap/book) (на английском)
+* [OpenStreetMap: A Beginner’s Guide](http://en.flossmanuals.net/openstreetmap/) (на английском/французском)
+* [OpenLayers 2.10 Beginners Guide](https://www.packtpub.com/openlayers-2-1-javascript-web-mapping-library-beginners-guide/book) (на английском)
 
-## Community resources
-* OpenStreetMap Foundation
-* Project wiki
-* Mailing lists (searchable archive)
+## Ресурсы сообщества
+* [Фонд OpenStreetMap](https://wiki.osmfoundation.org/wiki/Main_Page)
+* [WikiOSM](https://wiki.openstreetmap.org/wiki/Main_Page)
+* Список рассылки (архив с возможностью поиска)
 
-## Press enquiries
-Please contact the OSM Foundation’s Communications Working Group.
+## Для СМИ
+Пожалуйста, свяжитесь с Рабочей группой по коммуникациям Фонда OSM.
 
-# About switch2osm
-Switch2osm is a community driven site coordinated by [Richard Fairhurst](http://www.systemed.net/) and [Paul Norman](http://www.paulnorman.ca/) with huge amounts of help from the OpenStreetMap community. You can [get involved on GitHub](https://github.com/switch2osm/switch2osm.github.io)
+# О проекте switch2osm
+witch2osm - это сайт сообщества OSM, координируемый [Ричардом Фэйрхерстом](http://www.systemed.net/) и [Полом Норманом](http://www.paulnorman.ca/). Он сделан при большой помощи и поддержке сообщества OSM. Перевод выполнен членами российского сообщества OSM. Вы также можете принять участие в этом проекте - ждем вас на [GitHub](https://github.com/Silka123/switch2osm.github.io).
 
-Comments or suggestions? Please make contact via IRC at the first instance.
-
+Есть комментарии или предложения? Пожалуйста, свяжитесь с нами на [форуме](https://forum.openstreetmap.org/) или Telegram-канале [RU-OSM](https://t.me/ruosm).

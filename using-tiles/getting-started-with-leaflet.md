@@ -1,24 +1,25 @@
 ---
 layout: docs
-title: Getting started with Leaflet
+title: Начинаем работать с Leaflet
 permalink: /using-tiles/getting-started-with-leaflet/
 ---
 
-# Introduction
-[Leaflet](http://leafletjs.com/) is a lightweight JavaScript library for embedding maps. It uses a permissive BSD open-source license so can be incorporated into any site without legal worries. Its source code is available on [GitHub](http://github.com/Leaflet/Leaflet).
+# Введение
 
-Here, we restrict ourselves to a small, self-contained example and refer to the official [tutorials](http://leafletjs.com/examples.html) and [documentation](http://leafletjs.com/reference.html) for elaborate usages.
+[Leaflet](http://leafletjs.com/) - это легкая библиотека на JavaScript, позволяющая встраивать карты в web. Она распространяется под лицензией BSD для программного обеспечения с открытым исходным кодом, что позволяет ее использовать абсолютно на любом сайте без каких-либо дополнительных юридических ограничений. Ее исходный текст доступен на [GitHub](http://github.com/Leaflet/Leaflet).
 
-# Getting started
-Copy the following content to a file `leaflet.html` and open it in your browser:
+На этом сайте мы ограничимся лишь небольшим примером, демонстрирующим возможности библиотеки, а также приведем ссылки на официальные [руководства](http://leafletjs.com/examples.html) и [документацию](http://leafletjs.com/reference.html) по использованию этой замечательной библиотеки.
+
+# Начало работы
+Создайте файл `leaflet.html`, скопируйте в него нижеприведенный код, сохраните и откройте в браузере:
 
 {% highlight html %}
 {% include leaflet.html %}
 {% endhighlight %}
 
-# Further links
-You want to …
+# Дополнительные ссылки
+Если вы хотите:
 
-* use a different background? → Leaflet natively supports [TMS](https://en.wikipedia.org/wiki/Tile_Map_Service) and [WMS](https://en.wikipedia.org/wiki/Web_Map_Service). See [there](http://leafletjs.com/reference.html#tilelayer) which options are supported in Leaflet.
-* add all of your company's locations? → Provide them as [GeoJSON](http://geojson.org/) and [include them](http://leafletjs.com/examples/geojson.html) in the map.
-* use a different map projection? → Use the [Proj4Leaflet](https://github.com/kartena/Proj4Leaflet) plugin.
+* использовать другой фон → Leaflet изначально поддерживает [TMS](https://en.wikipedia.org/wiki/Tile_Map_Service) и [WMS](https://ru.wikipedia.org/wiki/Web_Map_Service). Посмотрите [здесь](http://leafletjs.com/reference.html#tilelayer), какие еще опции есть у Leaflet.
+* обозначить все места, где располагается ваша компания? → Сохраните их координаты в файле [GeoJSON](http://geojson.org/) и они [появятся](http://leafletjs.com/examples/geojson.html) на карте.
+* использовать другую картографическую проекцию? → Используйте плагин [Proj4Leaflet](https://github.com/kartena/Proj4Leaflet).

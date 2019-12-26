@@ -19,19 +19,19 @@ exclude:
   - vendor
 
 menu:
-  - title: Why Switch?
+  - title: Зачем переходить?
     url: /why-switch/
-  - title: Case Studies
+  - title: Уже на OSM
     url: /case-studies/
-  - title: The Basics
+  - title: Основы
     url: /the-basics/
-  - title: Using Tiles
+  - title: Тайлы
     url: /using-tiles/
-  - title: Serving Tiles
+  - title: Делаем свои тайлы
     url: /serving-tiles/
-  - title: Other Uses
+  - title: Иное
     url: /other-uses/
-  - title: Providers
+  - title: Провайдеры
     url: /providers/
-  - title: Find Out More
+  - title: Узнайте больше
     url: /find-out-more/
